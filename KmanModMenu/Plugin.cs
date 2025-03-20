@@ -29,7 +29,7 @@ namespace KmanModMenu
 
         public void LateUpdate()
         {
-
+            
         }
     }
 }

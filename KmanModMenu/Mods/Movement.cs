@@ -15,10 +15,18 @@ using static KmanModMenu.Utilities.Inputs;
 
 namespace KmanModMenu.Mods
 {
-    internal class Movement
+    /// <summary>
+    /// Movement Class, all movment mods are stored here
+    /// </summary>
+    internal class Movement// for a more clear view of this class do ctrl+m then ctrl+o
     {
         #region Variables
 
+        private static bool AntiRepeatTeleport;
+        private static VRRig teleportRig;
+        private static float yOffset = 1.2f;
+        private static float time;
+        public static float mult = 7.5f;
         private static GameObject checkPoint;
         private static WaterVolume[] wv;
         public static float flySpeed = 12;
@@ -31,7 +39,7 @@ namespace KmanModMenu.Mods
 
         #region Functions
 
-        private static void Flight()
+        public static void Flight()
         {
             try
             {
@@ -144,6 +152,80 @@ namespace KmanModMenu.Mods
         {
             UnityEngine.Object.Destroy(checkPoint);
             checkPoint = null;
+        }
+
+        public static void TeleportGun()
+        {
+            if (teleportRig == null)
+            {
+                teleportRig = GameObject.Instantiate(
+                    GorillaTagger.Instance.offlineVRRig,
+                    GorillaLocomotion.Player.Instance.transform.position,
+                    GorillaLocomotion.Player.Instance.transform.rotation
+                );
+                teleportRig.enabled = false;
+                teleportRig.transform.position = Vector3.zero;
+
+                teleportRig.transform.Find("VR Constraints/LeftArm/Left Arm IK/SlideAudio").gameObject.SetActive(false);
+                teleportRig.transform.Find("VR Constraints/RightArm/Right Arm IK/SlideAudio").gameObject.SetActive(false);
+            }
+
+            var data = GunLib.Shoot();
+            if (data != null)
+            {
+                if (data.isShooting)
+                {
+                    if (data.isTriggered)
+                    {
+                        if (!AntiRepeatTeleport)
+                        {
+                            Teleport.Send(data.hitPosition);
+
+                            AntiRepeatTeleport = true;
+                        }
+                    }
+                    else
+                    {
+                        AntiRepeatTeleport = false;
+                    }
+
+                    time += Time.deltaTime * 1;
+                    yOffset = Mathf.SmoothStep(1, 1.2f, Mathf.PingPong(time, 1f));
+                    teleportRig.transform.position = data.hitPosition + Vector3.up * yOffset;
+                    teleportRig.transform.rotation = GorillaTagger.Instance.bodyCollider.transform.rotation;
+
+                    teleportRig.leftHand.rigTarget.localPosition =
+                        GorillaTagger.Instance.offlineVRRig.leftHand.rigTarget.localPosition;
+                    teleportRig.leftHand.rigTarget.rotation = GorillaTagger.Instance.offlineVRRig.leftHand.rigTarget.rotation;
+
+                    teleportRig.rightHand.rigTarget.localPosition =
+                        GorillaTagger.Instance.offlineVRRig.rightHand.rigTarget.localPosition;
+                    teleportRig.rightHand.rigTarget.rotation =
+                        GorillaTagger.Instance.offlineVRRig.rightHand.rigTarget.rotation;
+                    ;
+
+                    teleportRig.head.rigTarget.rotation = GorillaTagger.Instance.offlineVRRig.head.rigTarget.rotation;
+                    teleportRig.head.rigTarget.position = GorillaTagger.Instance.offlineVRRig.head.rigTarget.position;
+
+                    teleportRig.mainSkin.material = new Material(Shader.Find("UI/Default"));
+                    var fc = new Color32(41, 194, 255, 120);
+                    if (teleportRig.mainSkin.material.color != fc)
+                    {
+                        teleportRig.mainSkin.material.color = fc;
+                        var c32array = Enumerable.Repeat(fc, teleportRig.mainSkin.sharedMesh.colors32.Length).ToArray();
+                        var carray = Enumerable.Repeat((Color)fc, teleportRig.mainSkin.sharedMesh.colors.Length).ToArray();
+                        teleportRig.mainSkin.sharedMesh.colors32 = c32array;
+                        teleportRig.mainSkin.sharedMesh.colors = carray;
+                        teleportRig.mainSkin.material.color = fc;
+                    }
+                }
+                else
+                {
+                    AntiRepeatTeleport = false;
+                    teleportRig.transform.position = Vector3.zero;
+                    teleportRig.mainSkin.material = null;
+                }
+            }
         }
 
         public static void IronMonkey()
@@ -316,6 +398,20 @@ namespace KmanModMenu.Mods
             }
         }
 
+        public static void CleanSP()
+        {
+            var ins = GorillaLocomotion.Player.Instance;
+            if (GorillaGameManager.instance != null)
+                ins.maxJumpSpeed = GorillaGameManager.instance.LocalPlayerSpeed()[0];
+            else
+                ins.maxJumpSpeed = 6.5f;
+        }
+
+        public static void SpeedBoost()
+        {
+            GorillaLocomotion.Player.Instance.maxJumpSpeed = mult;
+        }
+
         #endregion
 
         #region Nested
@@ -443,6 +539,7 @@ namespace KmanModMenu.Mods
                 LeftDespawned = 48
             }
         }
+
         #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using KmanModMenu.Mods;
 using KmanModMenu.Utilities;
 using ModIOBrowser.Implementation;
 using System;
@@ -457,6 +458,52 @@ namespace KmanModMenu
 
         public static Button[] Movement =
         {
+            new Button
+            {
+                Name="Flight",
+                onClick = KmanModMenu.Mods.Movement.Flight,
+                isToggle = true,
+            },
+            new Button
+            {
+                Name="Platforms",
+                onClick = KmanModMenu.Mods.Movement.Platforms.Execute,
+                isToggle = true,
+            },
+            new Button
+            {
+                Name="Speed Boost",
+                onClick = KmanModMenu.Mods.Movement.SpeedBoost,
+                onDisable = KmanModMenu.Mods.Movement.CleanSP,
+                isToggle = true,
+            },
+            new Button
+            {
+                Name="Long Arms",
+                onClick = KmanModMenu.Mods.Movement.LongArms,
+                onDisable = KmanModMenu.Mods.Movement.LongArmsClean,
+                isToggle = true,
+            },
+            new Button
+            {
+                Name="No Clip",
+                onClick = KmanModMenu.Mods.Movement.NoClip,
+                onDisable = KmanModMenu.Mods.Movement.DisableNoClip,
+                isToggle = true,
+            },
+            new Button
+            {
+                Name="Check Point",
+                onClick = KmanModMenu.Mods.Movement.Checkpoint,
+                onDisable = KmanModMenu.Mods.Movement.CleanCheckpoint,
+                isToggle = true,
+            },
+            new Button
+            {
+                Name="Teleport Gun",
+                onClick = KmanModMenu.Mods.Movement.TeleportGun,
+                isToggle = true,
+            },
         };
 
         public static Button[] Player =

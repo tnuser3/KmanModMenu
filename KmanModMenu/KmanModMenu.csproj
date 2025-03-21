@@ -11,7 +11,7 @@
     <AssemblyName>KmanModMenu</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	<LangVersion>latest</LangVersion>
+    <LangVersion>latest</LangVersion>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -646,6 +646,11 @@
     <Compile Include="Harmony\Misc.cs" />
     <Compile Include="Harmony\VRRigPatch.cs" />
     <Compile Include="Mods\Movement.cs" />
+    <Compile Include="Mods\Visuals\BoxESP.cs" />
+    <Compile Include="Mods\Visuals\BoxFrameESP.cs" />
+    <Compile Include="Mods\Visuals\BreadCrumbs.cs" />
+    <Compile Include="Mods\Visuals\Chams.cs" />
+    <Compile Include="Mods\Visuals\Tracers.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ColourLerp.cs" />

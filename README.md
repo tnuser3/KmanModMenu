@@ -73,6 +73,9 @@ We welcome contributions from the community! Whether you're fixing a bug, adding
 ### 6. **Create a Pull Request**
    - Go to the original repository and click "New Pull Request." Select your branch and describe your changes. We'll review your PR and merge it if everything looks good!
 
+### 7. **Notes**
+   - All requests sent to the main branch will be ignored, **ONLY** send PR's to the prerelease branch!
+
 ---
 
 ## 📜 **Code of Conduct**

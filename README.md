@@ -31,6 +31,7 @@ Kman-Mod-Menu/
 ├── Docs/                # Documentation and guides
 ├── Mods/                # Folder for community-created mods
 ├── Utilites/             # Core libraries that helps the mod work.
+├── Harmony/             # Harmony Patches, blocks anti cheat checks.
 ├── Plugin.cs            # Main script file, loads the mod.
 ├── ConfigHandler            # Config Handler, loads saved config and handles all config related functions.
 ├── README.md            # This file

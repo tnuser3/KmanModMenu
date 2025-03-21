@@ -171,125 +171,91 @@ namespace KmanModMenu.Mods
             }
 
             var data = GunLib.Shoot();
-            if (data != null)
+            if (data == null) return;
+
+            if (data.isShooting)
             {
-                if (data.isShooting)
+                if (data.isTriggered && !AntiRepeatTeleport)
                 {
-                    if (data.isTriggered)
-                    {
-                        if (!AntiRepeatTeleport)
-                        {
-                            Teleport.Send(data.hitPosition);
-
-                            AntiRepeatTeleport = true;
-                        }
-                    }
-                    else
-                    {
-                        AntiRepeatTeleport = false;
-                    }
-
-                    time += Time.deltaTime * 1;
-                    yOffset = Mathf.SmoothStep(1, 1.2f, Mathf.PingPong(time, 1f));
-                    teleportRig.transform.position = data.hitPosition + Vector3.up * yOffset;
-                    teleportRig.transform.rotation = GorillaTagger.Instance.bodyCollider.transform.rotation;
-
-                    teleportRig.leftHand.rigTarget.localPosition =
-                        GorillaTagger.Instance.offlineVRRig.leftHand.rigTarget.localPosition;
-                    teleportRig.leftHand.rigTarget.rotation = GorillaTagger.Instance.offlineVRRig.leftHand.rigTarget.rotation;
-
-                    teleportRig.rightHand.rigTarget.localPosition =
-                        GorillaTagger.Instance.offlineVRRig.rightHand.rigTarget.localPosition;
-                    teleportRig.rightHand.rigTarget.rotation =
-                        GorillaTagger.Instance.offlineVRRig.rightHand.rigTarget.rotation;
-                    ;
-
-                    teleportRig.head.rigTarget.rotation = GorillaTagger.Instance.offlineVRRig.head.rigTarget.rotation;
-                    teleportRig.head.rigTarget.position = GorillaTagger.Instance.offlineVRRig.head.rigTarget.position;
-
-                    teleportRig.mainSkin.material = new Material(Shader.Find("UI/Default"));
-                    var fc = new Color32(41, 194, 255, 120);
-                    if (teleportRig.mainSkin.material.color != fc)
-                    {
-                        teleportRig.mainSkin.material.color = fc;
-                        var c32array = Enumerable.Repeat(fc, teleportRig.mainSkin.sharedMesh.colors32.Length).ToArray();
-                        var carray = Enumerable.Repeat((Color)fc, teleportRig.mainSkin.sharedMesh.colors.Length).ToArray();
-                        teleportRig.mainSkin.sharedMesh.colors32 = c32array;
-                        teleportRig.mainSkin.sharedMesh.colors = carray;
-                        teleportRig.mainSkin.material.color = fc;
-                    }
+                    Teleport.Send(data.hitPosition);
+                    AntiRepeatTeleport = true;
                 }
-                else
+                else if (!data.isTriggered)
                 {
                     AntiRepeatTeleport = false;
-                    teleportRig.transform.position = Vector3.zero;
-                    teleportRig.mainSkin.material = null;
                 }
+
+                time += Time.deltaTime;
+                yOffset = Mathf.SmoothStep(1, 1.2f, Mathf.PingPong(time, 1f));
+                teleportRig.transform.SetPositionAndRotation(data.hitPosition + Vector3.up * yOffset, GorillaTagger.Instance.bodyCollider.transform.rotation);
+
+                var offlineRig = GorillaTagger.Instance.offlineVRRig;
+                teleportRig.leftHand.rigTarget.SetPositionAndRotation(offlineRig.leftHand.rigTarget.localPosition, offlineRig.leftHand.rigTarget.rotation);
+                teleportRig.rightHand.rigTarget.SetPositionAndRotation(offlineRig.rightHand.rigTarget.localPosition, offlineRig.rightHand.rigTarget.rotation);
+                teleportRig.head.rigTarget.SetPositionAndRotation(offlineRig.head.rigTarget.position, offlineRig.head.rigTarget.rotation);
+
+                var material = teleportRig.mainSkin.material;
+                if (material == null || material.shader.name != "UI/Default")
+                {
+                    material = new Material(Shader.Find("UI/Default"));
+                    teleportRig.mainSkin.material = material;
+                }
+
+                var fc = new Color32(41, 194, 255, 120);
+                if (material.color != fc)
+                {
+                    material.color = fc;
+                    var c32array = Enumerable.Repeat(fc, teleportRig.mainSkin.sharedMesh.colors32.Length).ToArray();
+                    var carray = Enumerable.Repeat((Color)fc, teleportRig.mainSkin.sharedMesh.colors.Length).ToArray();
+                    teleportRig.mainSkin.sharedMesh.colors32 = c32array;
+                    teleportRig.mainSkin.sharedMesh.colors = carray;
+                }
+            }
+            else
+            {
+                AntiRepeatTeleport = false;
+                teleportRig.transform.position = Vector3.zero;
+                teleportRig.mainSkin.material = null;
             }
         }
 
         public static void IronMonkey()
         {
             var RB = GorillaLocomotion.Player.Instance.bodyCollider.attachedRigidbody;
+            var rightController = GorillaLocomotion.Player.Instance.rightControllerTransform;
+            var leftController = GorillaLocomotion.Player.Instance.leftControllerTransform;
 
-            if (RightGrip)
+            void ApplyForceAndTrail(Transform controller, bool isRight, bool isGrip)
             {
-                RB.AddForce(20f * GorillaLocomotion.Player.Instance.rightControllerTransform.right,
-                    ForceMode.Acceleration);
+                if (!isGrip)
+                {
+                    var trail = controller.gameObject.GetComponent<TrailRenderer>();
+                    if (trail) GameObject.Destroy(trail);
+                    return;
+                }
 
-                var x = GorillaLocomotion.Player.Instance.rightControllerTransform.gameObject
-                    .GetComponent<TrailRenderer>();
-                if (!x)
-                    x = GorillaLocomotion.Player.Instance.rightControllerTransform.gameObject
-                        .AddComponent<TrailRenderer>();
+                RB.AddForce((isRight ? 20f : -20f) * controller.right, ForceMode.Acceleration);
 
-                x.material = new Material(Shader.Find("GUI/Text Shader"));
-                x.endWidth = 0.3f;
-                x.startWidth = 0.01f;
-                x.startColor = new Color32(255, 128, 0, 255);
-                x.endColor = new Color32(89, 45, 0, 0);
-                x.time = 2;
+                var trailRenderer = controller.gameObject.GetComponent<TrailRenderer>();
+                if (!trailRenderer)
+                    trailRenderer = controller.gameObject.AddComponent<TrailRenderer>();
 
-                GorillaTagger.Instance.StartVibration(false,
+                trailRenderer.material = new Material(Shader.Find("GUI/Text Shader"));
+                trailRenderer.endWidth = 0.3f;
+                trailRenderer.startWidth = 0.01f;
+                trailRenderer.startColor = new Color32(255, 128, 0, 255);
+                trailRenderer.endColor = new Color32(89, 45, 0, 0);
+                trailRenderer.time = 2;
+
+                GorillaTagger.Instance.StartVibration(!isRight,
                     GorillaTagger.Instance.tapHapticStrength / 50f * RB.velocity.magnitude,
                     GorillaTagger.Instance.tapHapticDuration);
             }
-            else if (GorillaLocomotion.Player.Instance.rightControllerTransform.gameObject
-                     .GetComponent<TrailRenderer>())
-            {
-                GameObject.Destroy(GorillaLocomotion.Player.Instance.rightControllerTransform.gameObject
-                    .GetComponent<TrailRenderer>());
-            }
 
-            if (LeftGrip)
-            {
-                RB.AddForce(-20f * GorillaLocomotion.Player.Instance.leftControllerTransform.right,
-                    ForceMode.Acceleration);
+            ApplyForceAndTrail(rightController, true, RightGrip);
+            ApplyForceAndTrail(leftController, false, LeftGrip);
 
-                var x =
-                    GorillaLocomotion.Player.Instance.leftControllerTransform.gameObject.GetComponent<TrailRenderer>();
-                if (!x)
-                    x = GorillaLocomotion.Player.Instance.leftControllerTransform.gameObject
-                        .AddComponent<TrailRenderer>();
-
-                x.material = new Material(Shader.Find("GUI/Text Shader"));
-                x.endWidth = 0.3f;
-                x.startWidth = 0.01f;
-                x.startColor = new Color32(255, 128, 0, 255);
-                x.endColor = new Color32(89, 45, 0, 0);
-                x.time = 2;
-
-                GorillaTagger.Instance.StartVibration(true,
-                    GorillaTagger.Instance.tapHapticStrength / 50f * RB.velocity.magnitude,
-                    GorillaTagger.Instance.tapHapticDuration);
-            }
-            else if (GorillaLocomotion.Player.Instance.leftControllerTransform.gameObject.GetComponent<TrailRenderer>())
-            {
-                GameObject.Destroy(
-                    GorillaLocomotion.Player.Instance.leftControllerTransform.gameObject.GetComponent<TrailRenderer>());
-            }
-
-            if (LeftGrip | RightGrip) RB.velocity = Vector3.ClampMagnitude(RB.velocity, 50f);
+            if (LeftGrip || RightGrip) RB.velocity = Vector3.ClampMagnitude(RB.velocity, 50f);
         }
 
         public static void WaterWalk()

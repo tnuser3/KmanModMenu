@@ -11,6 +11,7 @@
     <AssemblyName>KmanModMenu</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <LangVersion>latest</LangVersion>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -640,8 +641,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigHandler.cs" />
+    <Compile Include="Harmony\GNot.cs" />
+    <Compile Include="Harmony\Misc.cs" />
+    <Compile Include="Harmony\VRRigPatch.cs" />
+    <Compile Include="Mods\GamemodeExploits.cs" />
+    <Compile Include="Mods\LockRoom.cs" />
+    <Compile Include="Mods\Movement.cs" />
+    <Compile Include="Mods\Projectiles.cs" />
+    <Compile Include="Mods\RigMods.cs" />
+    <Compile Include="Mods\Rope.cs" />
+    <Compile Include="Mods\Shoplift.cs" />
+    <Compile Include="Mods\Spammer.cs" />
+    <Compile Include="Mods\Visuals\BoxESP.cs" />
+    <Compile Include="Mods\Visuals\BoxFrameESP.cs" />
+    <Compile Include="Mods\Visuals\BreadCrumbs.cs" />
+    <Compile Include="Mods\Visuals\Chams.cs" />
+    <Compile Include="Mods\Visuals\Tracers.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\ColourLerp.cs" />
+    <Compile Include="Utilities\GhostLib.cs" />
+    <Compile Include="Utilities\GunLib.cs" />
+    <Compile Include="Utilities\Inputs.cs" />
+    <Compile Include="Harmony\Teleport.cs" />
+    <Compile Include="Utilities\PhotonManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

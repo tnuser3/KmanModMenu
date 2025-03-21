@@ -31,6 +31,7 @@ Kman-Mod-Menu/
 ├── Docs/                # Documentation and guides
 ├── Mods/                # Folder for community-created mods
 ├── Utilites/             # Core libraries that helps the mod work.
+├── Harmony/             # Harmony Patches, blocks anti cheat checks.
 ├── Plugin.cs            # Main script file, loads the mod.
 ├── ConfigHandler            # Config Handler, loads saved config and handles all config related functions.
 ├── README.md            # This file
@@ -71,6 +72,9 @@ We welcome contributions from the community! Whether you're fixing a bug, adding
 
 ### 6. **Create a Pull Request**
    - Go to the original repository and click "New Pull Request." Select your branch and describe your changes. We'll review your PR and merge it if everything looks good!
+
+### 7. **Notes**
+   - All requests sent to the main branch will be ignored, **ONLY** send PR's to the prerelease branch!
 
 ---
 

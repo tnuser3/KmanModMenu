@@ -124,8 +124,8 @@ namespace KmanModMenu
                 bg.transform.localPosition = new Vector3(0.5f, 0f, 0.012f);
 
                 var lerp = bg.AddComponent<ColourLerp>();
-                lerp.StartColor = new Color32(39, 7, 99, 255);
-                lerp.EndColor = new Color32(44, 8, 112, 255);
+                lerp.StartColor = Color.red * 0.65f;
+                lerp.EndColor = Color.red * 0.4f;
 
                 canvasObject = new GameObject("Canvas")
                 {
@@ -201,8 +201,8 @@ namespace KmanModMenu
                 gameObject.AddComponent<ButtonInclineCollider>().inc = 1;
 
                 var lerp = gameObject.AddComponent<ColourLerp>();
-                lerp.StartColor = new Color32(39, 7, 99, 255);
-                lerp.EndColor = new Color32(44, 8, 112, 255);
+                lerp.StartColor = Color.red * 0.65f;
+                lerp.EndColor = Color.red * 0.4f;
 
 
                 var tiosber = new GameObject();
@@ -234,8 +234,8 @@ namespace KmanModMenu
                 gameObject2.AddComponent<ButtonInclineCollider>().inc = -1;
 
                 var lerp1 = gameObject2.AddComponent<ColourLerp>();
-                lerp1.StartColor = new Color32(39, 7, 99, 255);
-                lerp1.EndColor = new Color32(44, 8, 112, 255);
+                lerp.StartColor = Color.red * 0.65f;
+                lerp.EndColor = Color.red * 0.4f;
 
                 var text2nd = new GameObject();
                 var text2 = text2nd.AddComponent<Text>();
@@ -274,8 +274,8 @@ namespace KmanModMenu
                 };
 
                 var lerp3 = backButton.AddComponent<ColourLerp>();
-                lerp1.StartColor = new Color32(39, 7, 99, 255);
-                lerp1.EndColor = new Color32(44, 8, 112, 255);
+                lerp.StartColor = Color.red * 0.65f;
+                lerp.EndColor = Color.red * 0.4f;
 
                 var imrealylgay = new GameObject();
                 var text3 = imrealylgay.AddComponent<Text>();
@@ -322,9 +322,9 @@ namespace KmanModMenu
                 gameObject.AddComponent<ButtonCollider>().refrence = refrence;
 
                 if (refrence.Enabled)
-                    gameObject.GetComponent<Renderer>().material.color = new Color32(73, 16, 181, 255);
+                    gameObject.GetComponent<Renderer>().material.color = Color.red * 0.75f;
                 else
-                    gameObject.GetComponent<Renderer>().material.color = new Color32(63, 14, 156, 255);
+                    gameObject.GetComponent<Renderer>().material.color = Color.red * 0.6f;
                 var text2object = new GameObject();
                 var text2 = text2object.AddComponent<Text>();
                 text2.transform.SetParent(canvasObject.transform);

@@ -855,6 +855,7 @@
     <Compile Include="Mods\HoverboardItem.cs" />
     <Compile Include="Mods\LockRoom.cs" />
     <Compile Include="Mods\Movement.cs" />
+    <Compile Include="Mods\Overpowered.cs" />
     <Compile Include="Mods\Projectiles.cs" />
     <Compile Include="Mods\RigMods.cs" />
     <Compile Include="Mods\Rope.cs" />

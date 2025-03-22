@@ -353,7 +353,7 @@ namespace KmanModMenu
                 backButton.transform.localScale = new Vector3(0.09f, 0.8f, 0.08f);
                 backButton.transform.localPosition = new Vector3(0.56f, 0f, 0.51f);
 
-                backButton.AddComponent<ButtonCollider>().refrence = new Button
+                backButton.AddComponent<ButtonCollider>().refrence = new()
                 {
                     onClick = () =>
                     {
@@ -491,7 +491,7 @@ namespace KmanModMenu
 
         public static Button[] Home =
         {
-            new Button
+            new()
             {
                 Name = "Config",
                 onClick = () =>
@@ -501,7 +501,7 @@ namespace KmanModMenu
                 },
                 isToggle = false
             },
-            new Button
+            new()
             {
                 Name = "Movement",
                 onClick = () =>
@@ -511,7 +511,7 @@ namespace KmanModMenu
                 },
                 isToggle = false
             },
-            new Button
+            new()
             {
                 Name = "Player",
                 onClick = () =>
@@ -521,7 +521,7 @@ namespace KmanModMenu
                 },
                 isToggle = false
             },
-            new Button
+            new()
             {
                 Name = "Visual",
                 onClick = () =>
@@ -531,7 +531,7 @@ namespace KmanModMenu
                 },
                 isToggle = false
             },
-            new Button
+            new()
             {
                 Name = "OP",
                 onClick = () =>
@@ -545,7 +545,7 @@ namespace KmanModMenu
 
         public static ConfigButton[] Config =
         {
-            new ConfigButton
+            new()
             {
                 CycleAction = ConfigHandler.HandTapIndex,
                 Additive = "Grass",
@@ -556,78 +556,78 @@ namespace KmanModMenu
 
         public static Button[] Movement =
         {
-            new Button
+            new()
             {
                 Name="Flight",
                 onClick = KmanModMenu.Mods.Movement.Flight,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Platforms",
                 onClick = KmanModMenu.Mods.Movement.Platforms.Execute,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Speed Boost",
                 onClick = KmanModMenu.Mods.Movement.SpeedBoost,
                 onDisable = KmanModMenu.Mods.Movement.CleanSP,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Long Arms",
                 onClick = KmanModMenu.Mods.Movement.LongArms,
                 onDisable = KmanModMenu.Mods.Movement.LongArmsClean,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="No Clip",
                 onClick = KmanModMenu.Mods.Movement.NoClip,
                 onDisable = KmanModMenu.Mods.Movement.DisableNoClip,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Check Point",
                 onClick = KmanModMenu.Mods.Movement.Checkpoint,
                 onDisable = KmanModMenu.Mods.Movement.CleanCheckpoint,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Teleport Gun",
                 onClick = KmanModMenu.Mods.Movement.TeleportGun,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Iron Monkey",
                 onClick = KmanModMenu.Mods.Movement.IronMonkey,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Low Gravity",
                 onClick = KmanModMenu.Mods.Movement.LowGrav,
                 onDisable = KmanModMenu.Mods.Movement.FixGrav,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Fast Swim",
                 onClick = KmanModMenu.Mods.Movement.FastSwim,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Fast Spin",
                 onClick = KmanModMenu.Mods.Movement.FastSpin,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Water Walk",
                 onClick = KmanModMenu.Mods.Movement.WaterWalk,
@@ -637,123 +637,123 @@ namespace KmanModMenu
         };
 
         public static Button[] Player =
-        {            new Button
+        {            new()
             {
                 Name = "Ghost Monkey",
                 onClick = () => RigMods.Ghost(),
                 onDisable = () => RigMods.Clean(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Invis Monkey",
                 onClick = () => RigMods.Invis(),
                 onDisable = () => RigMods.Clean(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Freeze Rig [G]",
                 onClick = () => RigMods.PauseRig(),
                 onDisable = () => RigMods.Clean(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Copy Gun",
                 onClick = () => RigMods.CopyGun(),
                 onDisable = () => RigMods.Clean(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Follow Player",
                 onClick = () => RigMods.FollowGun(),
                 isToggle = true
             },
 
-            new Button
+            new()
             {
                 Name = "Tag Gun",
                 onClick = () => GamemodeExploits.TagGun(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Tag All",
                 onClick = () => GamemodeExploits.TagAll(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Untag Gun [M]",
                 onClick = () => GamemodeExploits.UntagGun(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Untag Self [M]",
                 onClick = () => GamemodeExploits.UntagSelf(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Anti Tag [M]",
                 onClick = () => GamemodeExploits.AntiTag(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Lock Room",
                 onClick = () => LockRoom.Execute(),
                 onDisable = () => LockRoom.UnlockRoom(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Shop Lift",
                 onClick = () => Shoplift.Execute(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Rope Up",
                 onClick = () => Rope.Up(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Rope Down",
                 onClick = () => Rope.Down(),
                 isToggle = true
             },
 
-            new Button
+            new()
             {
                 Name = "Cosmetic Spazz",
                 onClick = () => Spammer.ExecuteCosmetic(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Braclet Spam [T]",
                 onClick = () => Spammer.ExecuteBracelet(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Hand Tap Spam",
                 onClick = () => Spammer.ExecuteHandTap(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Door Spam",
                 onClick = () => Spammer.ExecuteDoor(),
                 isToggle = true
             },
 
-            new Button
+            new()
             {
                 Name = "Projectile Spam",
                 onClick = () => Projectiles.Execute(),
@@ -764,35 +764,35 @@ namespace KmanModMenu
 
         public static Button[] Visual =
         {
-            new Button
+            new()
             {
                 Name="Chams",
                 onClick = KmanModMenu.Mods.Visual.Chams.Execute,
                 onDisable = KmanModMenu.Mods.Visual.Chams.Disable,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Wireframe ESP",
                 onClick = KmanModMenu.Mods.Visual.BoxFrameESP.Execute,
                 onDisable = KmanModMenu.Mods.Visual.BoxFrameESP.Disable,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Box ESP",
                 onClick = KmanModMenu.Mods.Visual.BoxESP.Execute,
                 onDisable = KmanModMenu.Mods.Visual.BoxESP.Disable,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Tracers",
                 onClick = KmanModMenu.Mods.Visual.Tracers.Execute,
                 onDisable = KmanModMenu.Mods.Visual.Tracers.Disable,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Bread Crumbs",
                 onClick = KmanModMenu.Mods.Visual.BreadCrumbs.Execute,
@@ -803,13 +803,12 @@ namespace KmanModMenu
 
         public static Button[] Overpowered =
         {
-            new Button
-            {
+            new() {
                 Name="Create Board",
                 onClick = () => Task.Run(()=>KmanModMenu.Mods.HoverboardItem.GenerateBoard()),
                 isToggle = false,
             },
-            new Button
+            new()
             {
                 Name="Create Board Gun",
                 onClick = () => Task.Run(()=>KmanModMenu.Mods.HoverboardItem.BoardGun()),

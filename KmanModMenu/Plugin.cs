@@ -14,7 +14,7 @@ using static KmanModMenu.Utilities.Inputs;
 
 namespace KmanModMenu
 {
-    [BepInPlugin("com.kman.modmenu", "modmenu", "0.1.0")]
+    [BepInPlugin("com.kman.modmenu", "kmanmodmenu", "0.1.0")]
     public class Plugin : BaseUnityPlugin
     {
         #region Initializer
@@ -40,6 +40,8 @@ namespace KmanModMenu
             _init:*/
 
             _initialized = true;
+            DiscordRPCHandler.Initialize();
+            DiscordRPCHandler.Start();
             var go = new GameObject("KmanModMenu");
             go.AddComponent<Plugin>();
             DontDestroyOnLoad(go);
@@ -171,7 +173,7 @@ namespace KmanModMenu
                 text.transform.SetParent(canvasObject.transform);
 
                 text.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
-                text.text = "Kman Mod Menu";
+                text.text = "Kman Menu v0.1";
                 text.fontSize = 1;
                 text.alignment = TextAnchor.MiddleCenter;
                 text.resizeTextForBestFit = true;
@@ -259,8 +261,8 @@ namespace KmanModMenu
                 gameObject2.AddComponent<ButtonInclineCollider>().inc = -1;
 
                 var lerp1 = gameObject2.AddComponent<ColourLerp>();
-                lerp.StartColor = Color.red * 0.45f;
-                lerp.EndColor = Color.red * 0.2f;
+                lerp1.StartColor = Color.red * 0.45f;
+                lerp1.EndColor = Color.red * 0.2f;
 
                 var text2nd = new GameObject();
                 var text2 = text2nd.AddComponent<Text>();
@@ -299,8 +301,8 @@ namespace KmanModMenu
                 };
 
                 var lerp3 = backButton.AddComponent<ColourLerp>();
-                lerp.StartColor = Color.red * 0.45f;
-                lerp.EndColor = Color.red * 0.2f;
+                lerp3.StartColor = Color.red * 0.45f;
+                lerp3.EndColor = Color.red * 0.2f;
 
                 var imrealylgay = new GameObject();
                 var text3 = imrealylgay.AddComponent<Text>();

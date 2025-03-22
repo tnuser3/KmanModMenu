@@ -1,4 +1,6 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
+using HarmonyLib;
 using KmanModMenu.Mods;
 using KmanModMenu.Mods.Player;
 using KmanModMenu.Utilities;
@@ -21,11 +23,28 @@ namespace KmanModMenu
         public void Awake()
         {
             if (_initialized) return;
+
+            /*
+            string bepinexConfigPath = Path.Combine(Paths.ConfigPath, "BepInEx.cfg");
+
+            // All this does is checks if the hidemanager is on and if it is then it wont do anything if its not then it goes through the process of creating its own hidden object.
+            if (File.Exists(bepinexConfigPath))
+            {
+                ConfigFile bepinexConfig = new ConfigFile(bepinexConfigPath, true);
+                var hideManager = bepinexConfig.Bind("BepInEx", "HideManagerGameObject", false);
+                if (!hideManager.Value)
+                    goto _init;
+                else return;
+            }
+
+            _init:*/
+
+            _initialized = true;
             var go = new GameObject("KmanModMenu");
             go.AddComponent<Plugin>();
             DontDestroyOnLoad(go);
-
-            _initialized= true;
+            go.hideFlags = HideFlags.HideAndDontSave;
+            new HarmonyLib.Harmony("KmanModMenu").PatchAll();
 
             Destroy(this);
         }
@@ -33,6 +52,17 @@ namespace KmanModMenu
 
         public void LateUpdate()
         {
+            if (menu == null)
+            {
+                Draw();
+            }
+            if (refrence == null)
+            {
+                refrence = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                refrence.transform.parent = GorillaLocomotion.Player.Instance.rightControllerTransform;
+                refrence.transform.localPosition = new Vector3(0f, -0.1f, 0f);
+                refrence.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+            }
             try
             {
                 if (LeftSecondary && menu == null)
@@ -50,17 +80,10 @@ namespace KmanModMenu
                 {
                     if (!LeftSecondary && menu != null)
                     {
-                        if (FakeMenu)
-                        {
-                            GorillaLocomotion.Player.Instance.inOverlay = false;
-                            GorillaTagger.Instance.offlineVRRig.enabled = true;
-                            GorillaLocomotion.Player.Instance.bodyCollider.attachedRigidbody.isKinematic = false;
-                        }
-
-                        Destroy(menu);
-                        menu = null;
-                        Destroy(refrence);
-                        refrence = null;
+                        //Destroy(menu);
+                        //menu = null;
+                        //Destroy(refrence);
+                        //refrence = null;
                     }
                 }
 
@@ -126,8 +149,8 @@ namespace KmanModMenu
                 bg.transform.localPosition = new Vector3(0.5f, 0f, 0.012f);
 
                 var lerp = bg.AddComponent<ColourLerp>();
-                lerp.StartColor = Color.red * 0.65f;
-                lerp.EndColor = Color.red * 0.4f;
+                lerp.StartColor = Color.red * 0.45f;
+                lerp.EndColor = Color.red * 0.2f;
 
                 canvasObject = new GameObject("Canvas")
                 {
@@ -156,8 +179,8 @@ namespace KmanModMenu
 
                 var rt = text.GetComponent<RectTransform>();
                 rt.localPosition = Vector3.zero;
-                rt.sizeDelta = new Vector2(0.28f, 0.05f);
-                rt.position = new Vector3(0.06f, 0f, 0.1495f);
+                rt.sizeDelta = new Vector2(0.24f, 0.05f);
+                rt.position = new Vector3(0.06f, 0f, 0.145f);
                 rt.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
 
                 GenerateButtons();
@@ -203,8 +226,8 @@ namespace KmanModMenu
                 gameObject.AddComponent<ButtonInclineCollider>().inc = 1;
 
                 var lerp = gameObject.AddComponent<ColourLerp>();
-                lerp.StartColor = Color.red * 0.65f;
-                lerp.EndColor = Color.red * 0.4f;
+                lerp.StartColor = Color.red * 0.45f;
+                lerp.EndColor = Color.red * 0.2f;
 
 
                 var tiosber = new GameObject();
@@ -236,8 +259,8 @@ namespace KmanModMenu
                 gameObject2.AddComponent<ButtonInclineCollider>().inc = -1;
 
                 var lerp1 = gameObject2.AddComponent<ColourLerp>();
-                lerp.StartColor = Color.red * 0.65f;
-                lerp.EndColor = Color.red * 0.4f;
+                lerp.StartColor = Color.red * 0.45f;
+                lerp.EndColor = Color.red * 0.2f;
 
                 var text2nd = new GameObject();
                 var text2 = text2nd.AddComponent<Text>();
@@ -276,8 +299,8 @@ namespace KmanModMenu
                 };
 
                 var lerp3 = backButton.AddComponent<ColourLerp>();
-                lerp.StartColor = Color.red * 0.65f;
-                lerp.EndColor = Color.red * 0.4f;
+                lerp.StartColor = Color.red * 0.45f;
+                lerp.EndColor = Color.red * 0.2f;
 
                 var imrealylgay = new GameObject();
                 var text3 = imrealylgay.AddComponent<Text>();
@@ -324,9 +347,13 @@ namespace KmanModMenu
                 gameObject.AddComponent<ButtonCollider>().refrence = refrence;
 
                 if (refrence.Enabled)
-                    gameObject.GetComponent<Renderer>().material.color = Color.red * 0.75f;
+                    gameObject.GetComponent<Renderer>().material.color = Color.red * 0.45f;
                 else
-                    gameObject.GetComponent<Renderer>().material.color = Color.red * 0.6f;
+                {
+                    var lerp = gameObject.AddComponent<ColourLerp>();
+                    lerp.StartColor = Color.red * 0.45f;
+                    lerp.EndColor = Color.red * 0.2f;
+                }
                 var text2object = new GameObject();
                 var text2 = text2object.AddComponent<Text>();
                 text2.transform.SetParent(canvasObject.transform);
@@ -397,7 +424,6 @@ namespace KmanModMenu
         public static GameObject menu, refrence, canvasObject;
         public static int PageNumber, PageSize = 5;
         public static PageType CurrentPage = PageType.Home;
-        public static bool FakeMenu;
 
         public static Button[] Home =
         {

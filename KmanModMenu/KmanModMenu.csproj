@@ -396,6 +396,7 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Gorilla Tag\Gorilla Tag_Data\Managed\SteamVR_Actions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="Unity.Addressables">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Gorilla Tag\Gorilla Tag_Data\Managed\Unity.Addressables.dll</HintPath>
       <Private>False</Private>
@@ -851,6 +852,7 @@
     <Compile Include="Harmony\Misc.cs" />
     <Compile Include="Harmony\VRRigPatch.cs" />
     <Compile Include="Mods\GamemodeExploits.cs" />
+    <Compile Include="Mods\HoverboardItem.cs" />
     <Compile Include="Mods\LockRoom.cs" />
     <Compile Include="Mods\Movement.cs" />
     <Compile Include="Mods\Projectiles.cs" />

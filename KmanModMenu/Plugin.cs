@@ -801,7 +801,19 @@ namespace KmanModMenu
         };
 
         public static Button[] Overpowered =
-        { 
+        {
+            new Button
+            {
+                Name="TestGrab",
+                onClick = KmanModMenu.Mods.HoverboardItem.GrabBoard,
+                isToggle = false,
+            },
+            new Button
+            {
+                Name="TestDrop",
+                onClick = KmanModMenu.Mods.HoverboardItem.DropBoard,
+                isToggle = false,
+            },
         };
 
         #endregion

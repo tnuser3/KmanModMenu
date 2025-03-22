@@ -8,6 +8,7 @@ using ModIOBrowser.Implementation;
 using System;
 using System.Linq;
 using System.Security.Policy;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using static KmanModMenu.Utilities.Inputs;
@@ -804,15 +805,15 @@ namespace KmanModMenu
         {
             new Button
             {
-                Name="TestGrab",
-                onClick = KmanModMenu.Mods.HoverboardItem.GrabBoard,
+                Name="Create Board",
+                onClick = () => Task.Run(()=>KmanModMenu.Mods.HoverboardItem.GenerateBoard()),
                 isToggle = false,
             },
             new Button
             {
-                Name="TestDrop",
-                onClick = KmanModMenu.Mods.HoverboardItem.DropBoard,
-                isToggle = false,
+                Name="Create Board Gun",
+                onClick = () => Task.Run(()=>KmanModMenu.Mods.HoverboardItem.BoardGun()),
+                isToggle = true,
             },
         };
 

@@ -45,10 +45,10 @@ namespace KmanModMenu.Mods
             {
                 if (RightPrimary)
                 {
-                    GorillaLocomotion.Player.Instance.transform.position +=
-                        GorillaLocomotion.Player.Instance.rightControllerTransform.forward * Time.deltaTime *
+                    GorillaLocomotion.GTPlayer.Instance.transform.position +=
+                        GorillaLocomotion.GTPlayer.Instance.rightControllerTransform.forward * Time.deltaTime *
                         flySpeed;
-                    GorillaLocomotion.Player.Instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    GorillaLocomotion.GTPlayer.Instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 }
 
                 if (RightSecondary)
@@ -78,35 +78,35 @@ namespace KmanModMenu.Mods
         public static void FastSpin()
         {
             if (RightTrigger && LeftTrigger)
-                GorillaLocomotion.Player.Instance.Turn(-30f);
+                GorillaLocomotion.GTPlayer.Instance.Turn(-30f);
         }
 
         public static void FastSwim()
         {
-            if (GorillaLocomotion.Player.Instance.InWater)
-                GorillaLocomotion.Player.Instance.bodyCollider.attachedRigidbody.velocity =
-                    GorillaLocomotion.Player.Instance.bodyCollider.attachedRigidbody.velocity * 1.01f;
+            if (GorillaLocomotion.GTPlayer.Instance.InWater)
+                GorillaLocomotion.GTPlayer.Instance.bodyCollider.attachedRigidbody.velocity =
+                    GorillaLocomotion.GTPlayer.Instance.bodyCollider.attachedRigidbody.velocity * 1.01f;
         }
 
         public static void BHop()
         {
-            if (GorillaLocomotion.Player.Instance.IsHandTouching(false) && RightGrip)
+            if (GorillaLocomotion.GTPlayer.Instance.IsHandTouching(false) && RightGrip)
             {
-                GorillaLocomotion.Player.Instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                GorillaLocomotion.Player.Instance.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-                GorillaLocomotion.Player.Instance.GetComponent<Rigidbody>()
+                GorillaLocomotion.GTPlayer.Instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                GorillaLocomotion.GTPlayer.Instance.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                GorillaLocomotion.GTPlayer.Instance.GetComponent<Rigidbody>()
                     .AddForce(Vector3.up * 200f, ForceMode.Impulse);
-                GorillaLocomotion.Player.Instance.GetComponent<Rigidbody>().AddForce(
+                GorillaLocomotion.GTPlayer.Instance.GetComponent<Rigidbody>().AddForce(
                     GorillaTagger.Instance.offlineVRRig.rightHandPlayer.transform.right * 330f, ForceMode.Impulse);
             }
 
-            if (GorillaLocomotion.Player.Instance.IsHandTouching(true) && LeftGrip)
+            if (GorillaLocomotion.GTPlayer.Instance.IsHandTouching(true) && LeftGrip)
             {
-                GorillaLocomotion.Player.Instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                GorillaLocomotion.Player.Instance.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-                GorillaLocomotion.Player.Instance.GetComponent<Rigidbody>()
+                GorillaLocomotion.GTPlayer.Instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                GorillaLocomotion.GTPlayer.Instance.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                GorillaLocomotion.GTPlayer.Instance.GetComponent<Rigidbody>()
                     .AddForce(Vector3.up * 200f, ForceMode.Impulse);
-                GorillaLocomotion.Player.Instance.GetComponent<Rigidbody>().AddForce(
+                GorillaLocomotion.GTPlayer.Instance.GetComponent<Rigidbody>().AddForce(
                     -GorillaTagger.Instance.offlineVRRig.leftHandPlayer.transform.right * 330f, ForceMode.Impulse);
             }
         }
@@ -130,7 +130,7 @@ namespace KmanModMenu.Mods
                     var renderer = checkPoint.GetComponent<Renderer>();
 
                     if (renderer != null) renderer.material.color = Color.red;
-                    checkPoint.transform.position = GorillaLocomotion.Player.Instance.rightHandFollower.transform.position;
+                    checkPoint.transform.position = GorillaLocomotion.GTPlayer.Instance.rightHandFollower.transform.position;
                 }
             }
             else if (RightTrigger)
@@ -160,8 +160,8 @@ namespace KmanModMenu.Mods
             {
                 teleportRig = GameObject.Instantiate(
                     GorillaTagger.Instance.offlineVRRig,
-                    GorillaLocomotion.Player.Instance.transform.position,
-                    GorillaLocomotion.Player.Instance.transform.rotation
+                    GorillaLocomotion.GTPlayer.Instance.transform.position,
+                    GorillaLocomotion.GTPlayer.Instance.transform.rotation
                 );
                 teleportRig.enabled = false;
                 teleportRig.transform.position = Vector3.zero;
@@ -221,9 +221,9 @@ namespace KmanModMenu.Mods
 
         public static void IronMonkey()
         {
-            var RB = GorillaLocomotion.Player.Instance.bodyCollider.attachedRigidbody;
-            var rightController = GorillaLocomotion.Player.Instance.rightControllerTransform;
-            var leftController = GorillaLocomotion.Player.Instance.leftControllerTransform;
+            var RB = GorillaLocomotion.GTPlayer.Instance.bodyCollider.attachedRigidbody;
+            var rightController = GorillaLocomotion.GTPlayer.Instance.rightControllerTransform;
+            var leftController = GorillaLocomotion.GTPlayer.Instance.leftControllerTransform;
 
             void ApplyForceAndTrail(Transform controller, bool isRight, bool isGrip)
             {
@@ -289,8 +289,8 @@ namespace KmanModMenu.Mods
 
         public static void LongArmsClean()
         {
-            GorillaLocomotion.Player.Instance.leftHandOffset = new Vector3(-0.02f, 0f, -0.07f);
-            GorillaLocomotion.Player.Instance.rightHandOffset = new Vector3(0.02f, 0f, -0.07f);
+            GorillaLocomotion.GTPlayer.Instance.leftHandOffset = new Vector3(-0.02f, 0f, -0.07f);
+            GorillaLocomotion.GTPlayer.Instance.rightHandOffset = new Vector3(0.02f, 0f, -0.07f);
             LongArmsOffset = 0;
         }
 
@@ -302,14 +302,14 @@ namespace KmanModMenu.Mods
 
             if (LeftPrimary)
             {
-                GorillaLocomotion.Player.Instance.leftHandOffset = new Vector3(-0.02f, 0f, -0.07f);
-                GorillaLocomotion.Player.Instance.rightHandOffset = new Vector3(0.02f, 0f, -0.07f);
+                GorillaLocomotion.GTPlayer.Instance.leftHandOffset = new Vector3(-0.02f, 0f, -0.07f);
+                GorillaLocomotion.GTPlayer.Instance.rightHandOffset = new Vector3(0.02f, 0f, -0.07f);
                 LongArmsOffset = 0;
                 return;
             }
 
-            GorillaLocomotion.Player.Instance.rightHandOffset = new Vector3(-0.02f, LongArmsOffset, -0.07f);
-            GorillaLocomotion.Player.Instance.leftHandOffset = new Vector3(-0.02f, LongArmsOffset, -0.07f);
+            GorillaLocomotion.GTPlayer.Instance.rightHandOffset = new Vector3(-0.02f, LongArmsOffset, -0.07f);
+            GorillaLocomotion.GTPlayer.Instance.leftHandOffset = new Vector3(-0.02f, LongArmsOffset, -0.07f);
         }
 
         public static void LowGrav()
@@ -366,7 +366,7 @@ namespace KmanModMenu.Mods
 
         public static void CleanSP()
         {
-            var ins = GorillaLocomotion.Player.Instance;
+            var ins = GorillaLocomotion.GTPlayer.Instance;
             if (GorillaGameManager.instance != null)
                 ins.maxJumpSpeed = GorillaGameManager.instance.LocalPlayerSpeed()[0];
             else
@@ -375,7 +375,7 @@ namespace KmanModMenu.Mods
 
         public static void SpeedBoost()
         {
-            GorillaLocomotion.Player.Instance.maxJumpSpeed = mult;
+            GorillaLocomotion.GTPlayer.Instance.maxJumpSpeed = mult;
         }
 
         #endregion
@@ -464,13 +464,13 @@ namespace KmanModMenu.Mods
                 StartNetworkedJump();
                 var others = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
 
-                HandlePlatform(ref RightPlat, RightGrip, GorillaLocomotion.Player.Instance.rightControllerTransform, EventCode.RightSpawned, EventCode.RightDespawned, type, scale, posAdditive, others);
-                HandlePlatform(ref LeftPlat, LeftGrip, GorillaLocomotion.Player.Instance.leftControllerTransform, EventCode.LeftSpawned, EventCode.LeftDespawned, type, scale, posAdditive, others);
+                HandlePlatform(ref RightPlat, RightGrip, GorillaLocomotion.GTPlayer.Instance.rightControllerTransform, EventCode.RightSpawned, EventCode.RightDespawned, type, scale, posAdditive, others);
+                HandlePlatform(ref LeftPlat, LeftGrip, GorillaLocomotion.GTPlayer.Instance.leftControllerTransform, EventCode.LeftSpawned, EventCode.LeftDespawned, type, scale, posAdditive, others);
             }
 
             private static void HandlePlatform(ref GameObject platform, bool grip, Transform controllerTransform, EventCode spawnCode, EventCode despawnCode, PrimitiveType type, Vector3 scale, Vector3 posAdditive, RaiseEventOptions others)
             {
-                if (grip && platform == null && (controllerTransform == GorillaLocomotion.Player.Instance.rightControllerTransform || !GunLib.data.isShooting))
+                if (grip && platform == null && (controllerTransform == GorillaLocomotion.GTPlayer.Instance.rightControllerTransform || !GunLib.data.isShooting))
                 {
                     platform = CreatePlatform(controllerTransform.position + posAdditive, controllerTransform.rotation, scale);
                     platform.layer = LayerMask.NameToLayer("Gorilla Object");

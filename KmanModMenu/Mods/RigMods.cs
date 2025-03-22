@@ -25,9 +25,9 @@ namespace KmanModMenu.Mods.Player
             {
                 GorillaTagger.Instance.offlineVRRig.enabled = false;
                 GorillaTagger.Instance.offlineVRRig.transform.position =
-                    GorillaLocomotion.Player.Instance.bodyCollider.transform.position + new Vector3(0, 0.2f, 0);
+                    GorillaLocomotion.GTPlayer.Instance.bodyCollider.transform.position + new Vector3(0, 0.2f, 0);
                 GorillaTagger.Instance.offlineVRRig.transform.rotation =
-                    GorillaLocomotion.Player.Instance.bodyCollider.transform.rotation;
+                    GorillaLocomotion.GTPlayer.Instance.bodyCollider.transform.rotation;
             }
             else
             {
@@ -53,7 +53,7 @@ namespace KmanModMenu.Mods.Player
             var data = GunLib.ShootLocked();
             if (data.isShooting && data.isTriggered && data.isLocked)
                 if (data.lockedPlayer)
-                    GorillaLocomotion.Player.Instance.transform.position =
+                    GorillaLocomotion.GTPlayer.Instance.transform.position =
                         data.lockedPlayer.transform.position + Vector3.up * 3;
         }
 

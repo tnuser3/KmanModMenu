@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace KmanModMenu.Harmony
 {
-    [HarmonyPatch(typeof(Player), "LateUpdate", MethodType.Normal)]
+    [HarmonyPatch(typeof(GorillaLocomotion.GTPlayer), "LateUpdate", MethodType.Normal)]
     internal class Teleport
     {
         private static bool isTeleporting;
@@ -20,7 +20,7 @@ namespace KmanModMenu.Harmony
             position = vec;
         }
 
-        public static bool Prefix(Player __instance, ref Vector3 ___lastPosition, ref Vector3[] ___velocityHistory,
+        public static bool Prefix(GorillaLocomotion.GTPlayer __instance, ref Vector3 ___lastPosition, ref Vector3[] ___velocityHistory,
     ref Vector3 ___lastHeadPosition, ref Vector3 ___lastLeftHandPosition, ref Vector3 ___lastRightHandPosition,
     ref Vector3 ___currentVelocity)
         {
@@ -43,7 +43,7 @@ namespace KmanModMenu.Harmony
             return false;
         }
 
-        [HarmonyPatch(typeof(Player), "AntiTeleportTechnology")]
+        [HarmonyPatch(typeof(GorillaLocomotion.GTPlayer), "AntiTeleportTechnology")]
         private class AntiTeleport
         {
             public static bool Prefix()

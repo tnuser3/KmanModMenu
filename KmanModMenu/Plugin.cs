@@ -44,6 +44,8 @@ namespace KmanModMenu
             DiscordRPCHandler.Start();
             var go = new GameObject("KmanModMenu");
             go.AddComponent<Plugin>();
+            go.AddComponent<Inputs>();
+            go.AddComponent<GhostLib>();
             DontDestroyOnLoad(go);
             go.hideFlags = HideFlags.HideAndDontSave;
             new HarmonyLib.Harmony("KmanModMenu").PatchAll();
@@ -51,6 +53,65 @@ namespace KmanModMenu
             Destroy(this);
         }
         #endregion
+        Rect window = new Rect(10, 10, 250, 700);
+        Vector2 scroll = new Vector2(0, 0);
+        void OnGUI()
+        {
+            window = GUI.Window(193494, window, windowr, "smelly");
+        }
+
+        void windowr(int id)
+        {
+            scroll = GUILayout.BeginScrollView(scroll);
+            for (int i = 0; i < Movement.Length; i++)
+            {
+                if (Movement[i] != null)
+                {
+                    GUI.contentColor = Movement[i].Enabled ? Color.green : Color.red;
+                    if (GUILayout.Button(Movement[i].Name))
+                    {
+                        OnClick(ref Movement[i]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < Overpowered.Length; i++)
+            {
+                if (Overpowered[i] != null)
+                {
+                    GUI.contentColor = Overpowered[i].Enabled ? Color.green : Color.red;
+                    if (GUILayout.Button(Overpowered[i].Name))
+                    {
+                        OnClick(ref Overpowered[i]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < Player.Length; i++)
+            {
+                if (Player[i] != null)
+                {
+                    GUI.contentColor = Player[i].Enabled ? Color.green : Color.red;
+                    if (GUILayout.Button(Player[i].Name))
+                    {
+                        OnClick(ref Player[i]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < Visual.Length; i++)
+            {
+                if (Visual[i] != null)
+                {
+                    GUI.contentColor = Visual[i].Enabled ? Color.green : Color.red;
+                    if (GUILayout.Button(Visual[i].Name))
+                    {
+                        OnClick(ref Visual[i]);
+                    }
+                }
+            }
+            GUILayout.EndScrollView();
+        }
 
         public void LateUpdate()
         {
@@ -61,7 +122,7 @@ namespace KmanModMenu
             if (refrence == null)
             {
                 refrence = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                refrence.transform.parent = GorillaLocomotion.Player.Instance.rightControllerTransform;
+                refrence.transform.parent = GorillaLocomotion.GTPlayer.Instance.rightControllerTransform;
                 refrence.transform.localPosition = new Vector3(0f, -0.1f, 0f);
                 refrence.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
             }
@@ -73,7 +134,7 @@ namespace KmanModMenu
                     if (refrence == null)
                     {
                         refrence = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                        refrence.transform.parent = GorillaLocomotion.Player.Instance.rightControllerTransform;
+                        refrence.transform.parent = GorillaLocomotion.GTPlayer.Instance.rightControllerTransform;
                         refrence.transform.localPosition = new Vector3(0f, -0.1f, 0f);
                         refrence.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
                     }
@@ -91,8 +152,8 @@ namespace KmanModMenu
 
                 if (LeftSecondary && menu != null)
                 {
-                    menu.transform.position = GorillaLocomotion.Player.Instance.leftControllerTransform.position;
-                    menu.transform.rotation = GorillaLocomotion.Player.Instance.leftControllerTransform.rotation;
+                    menu.transform.position = GorillaLocomotion.GTPlayer.Instance.leftControllerTransform.position;
+                    menu.transform.rotation = GorillaLocomotion.GTPlayer.Instance.leftControllerTransform.rotation;
                 }
 
                 foreach (var b in Movement)
@@ -133,7 +194,7 @@ namespace KmanModMenu
                 {
                     transform =
                     {
-                        localScale = new Vector3(0.1f, 0.3f, 0.4f) * GorillaLocomotion.Player.Instance.scale
+                        localScale = new Vector3(0.1f, 0.3f, 0.4f) * GorillaLocomotion.GTPlayer.Instance.scale
                     }
                 };
 
@@ -166,7 +227,7 @@ namespace KmanModMenu
                 canvasObject.AddComponent<GraphicRaycaster>();
                 canvas.renderMode = RenderMode.WorldSpace;
                 canvasScaler.dynamicPixelsPerUnit = 1000f;
-                canvasObject.transform.localScale *= GorillaLocomotion.Player.Instance.scale;
+                canvasObject.transform.localScale *= GorillaLocomotion.GTPlayer.Instance.scale;
 
                 var text = new GameObject("textObj").AddComponent<Text>();
 

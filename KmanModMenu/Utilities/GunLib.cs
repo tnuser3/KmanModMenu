@@ -42,8 +42,8 @@ namespace KmanModMenu.Utilities
                 {
                     var result =
                         Physics.Raycast(
-                            Player.Instance.rightControllerTransform.position -
-                            Player.Instance.rightControllerTransform.up, -Player.Instance.rightControllerTransform.up,
+                            GorillaLocomotion.GTPlayer.Instance.rightControllerTransform.position -
+                            GorillaLocomotion.GTPlayer.Instance.rightControllerTransform.up, -GorillaLocomotion.GTPlayer.Instance.rightControllerTransform.up,
                             out var hit, float.PositiveInfinity, Layers);
                     if (result)
                     {
@@ -236,9 +236,9 @@ namespace KmanModMenu.Utilities
                     {
                         var result =
                             Physics.Raycast(
-                                Player.Instance.rightControllerTransform.position -
-                                Player.Instance.rightControllerTransform.up,
-                                -Player.Instance.rightControllerTransform.up, out var hit, float.PositiveInfinity,
+                                GorillaLocomotion.GTPlayer.Instance.rightControllerTransform.position -
+                                GorillaLocomotion.GTPlayer.Instance.rightControllerTransform.up,
+                                -GorillaLocomotion.GTPlayer.Instance.rightControllerTransform.up, out var hit, float.PositiveInfinity,
                                 Layers);
                         if (result)
                         {

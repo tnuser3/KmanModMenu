@@ -38,7 +38,7 @@ namespace KmanModMenu.Mods.Visual
 
                         pairs[rig].SetPositions(new[]
                         {
-                            GorillaLocomotion.Player.Instance.rightControllerTransform.position,
+                            GorillaLocomotion.GTPlayer.Instance.rightControllerTransform.position,
                             rig.transform.position
                         });
 

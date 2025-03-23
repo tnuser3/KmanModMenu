@@ -21,10 +21,10 @@ namespace KmanModMenu.Mods.Player
         public static (Vector3 position, Quaternion rotation, Vector3 up, Vector3 forward, Vector3 right) TrueLeftHand()
         {
             var rot = GorillaTagger.Instance.leftHandTransform.rotation *
-                      GorillaLocomotion.Player.Instance.leftHandRotOffset;
+                      GorillaLocomotion.GTPlayer.Instance.leftHandRotOffset;
             return (
                 GorillaTagger.Instance.leftHandTransform.position + GorillaTagger.Instance.leftHandTransform.rotation *
-                GorillaLocomotion.Player.Instance.leftHandOffset, rot, rot * Vector3.up, rot * Vector3.forward,
+                GorillaLocomotion.GTPlayer.Instance.leftHandOffset, rot, rot * Vector3.up, rot * Vector3.forward,
                 rot * Vector3.right);
         }
 
@@ -32,10 +32,10 @@ namespace KmanModMenu.Mods.Player
             TrueRightHand()
         {
             var rot = GorillaTagger.Instance.rightHandTransform.rotation *
-                      GorillaLocomotion.Player.Instance.rightHandRotOffset;
+                      GorillaLocomotion.GTPlayer.Instance.rightHandRotOffset;
             return (
                 GorillaTagger.Instance.rightHandTransform.position +
-                GorillaTagger.Instance.rightHandTransform.rotation * GorillaLocomotion.Player.Instance.rightHandOffset,
+                GorillaTagger.Instance.rightHandTransform.rotation * GorillaLocomotion.GTPlayer.Instance.rightHandOffset,
                 rot, rot * Vector3.up, rot * Vector3.forward, rot * Vector3.right);
         }
 

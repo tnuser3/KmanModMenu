@@ -27,13 +27,13 @@ The Gorilla Tag modding scene lacks a truly collaborative and community-focused 
 
 ```
 Kman-Mod-Menu/
-├── Assets/               # Contains icons, images, assemblies, and other assets
+├── Assets/              # Contains icons, images, assemblies, and other assets
 ├── Docs/                # Documentation and guides
 ├── Mods/                # Folder for community-created mods
-├── Utilites/             # Core libraries that helps the mod work.
+├── Utilites/            # Core libraries that helps the mod work.
 ├── Harmony/             # Harmony Patches, blocks anti cheat checks.
 ├── Plugin.cs            # Main script file, loads the mod.
-├── ConfigHandler            # Config Handler, loads saved config and handles all config related functions.
+├── ConfigHandler        # Config Handler, loads saved config and handles all config related functions.
 ├── README.md            # This file
 └── LICENSE              # Open-source license
 ```

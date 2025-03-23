@@ -1,18 +1,22 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
+using HarmonyLib;
 using KmanModMenu.Mods;
 using KmanModMenu.Mods.Player;
 using KmanModMenu.Utilities;
+using KmanModMenu.Utilities.ModuleHandler;
 using ModIOBrowser.Implementation;
 using System;
 using System.Linq;
 using System.Security.Policy;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using static KmanModMenu.Utilities.Inputs;
 
 namespace KmanModMenu
 {
-    [BepInPlugin("com.kman.modmenu", "modmenu", "0.1.0")]
+    [BepInPlugin("com.kman.modmenu", "kmanmodmenu", "0.2.0")]
     public class Plugin : BaseUnityPlugin
     {
         #region Initializer
@@ -21,18 +25,110 @@ namespace KmanModMenu
         public void Awake()
         {
             if (_initialized) return;
+
+            /*
+            string bepinexConfigPath = Path.Combine(Paths.ConfigPath, "BepInEx.cfg");
+
+            // All this does is checks if the hidemanager is on and if it is then it wont do anything if its not then it goes through the process of creating its own hidden object.
+            if (File.Exists(bepinexConfigPath))
+            {
+                ConfigFile bepinexConfig = new ConfigFile(bepinexConfigPath, true);
+                var hideManager = bepinexConfig.Bind("BepInEx", "HideManagerGameObject", false);
+                if (!hideManager.Value)
+                    goto _init;
+                else return;
+            }
+
+            _init:*/
+
+            _initialized = true;
+            DiscordRPCHandler.Initialize();
+            DiscordRPCHandler.Start();
             var go = new GameObject("KmanModMenu");
             go.AddComponent<Plugin>();
+            go.AddComponent<Inputs>();
+            go.AddComponent<GhostLib>();
+            go.AddComponent<Runner>();
             DontDestroyOnLoad(go);
-
-            _initialized= true;
+            go.hideFlags = HideFlags.HideAndDontSave;
+            new HarmonyLib.Harmony("KmanModMenu").PatchAll();
 
             Destroy(this);
         }
         #endregion
+        Rect window = new Rect(10, 10, 250, 700);
+        Vector2 scroll = new Vector2(0, 0);
+        void OnGUI()
+        {
+            window = GUI.Window(193494, window, windowr, "smelly");
+        }
+
+        void windowr(int id)
+        {
+            scroll = GUILayout.BeginScrollView(scroll);
+            for (int i = 0; i < Movement.Length; i++)
+            {
+                if (Movement[i] != null)
+                {
+                    GUI.contentColor = Movement[i].Enabled ? Color.green : Color.red;
+                    if (GUILayout.Button(Movement[i].Name))
+                    {
+                        OnClick(ref Movement[i]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < Overpowered.Length; i++)
+            {
+                if (Overpowered[i] != null)
+                {
+                    GUI.contentColor = Overpowered[i].Enabled ? Color.green : Color.red;
+                    if (GUILayout.Button(Overpowered[i].Name))
+                    {
+                        OnClick(ref Overpowered[i]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < Player.Length; i++)
+            {
+                if (Player[i] != null)
+                {
+                    GUI.contentColor = Player[i].Enabled ? Color.green : Color.red;
+                    if (GUILayout.Button(Player[i].Name))
+                    {
+                        OnClick(ref Player[i]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < Visual.Length; i++)
+            {
+                if (Visual[i] != null)
+                {
+                    GUI.contentColor = Visual[i].Enabled ? Color.green : Color.red;
+                    if (GUILayout.Button(Visual[i].Name))
+                    {
+                        OnClick(ref Visual[i]);
+                    }
+                }
+            }
+            GUILayout.EndScrollView();
+        }
 
         public void LateUpdate()
         {
+            if (menu == null)
+            {
+                Draw();
+            }
+            if (refrence == null)
+            {
+                refrence = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                refrence.transform.parent = GorillaLocomotion.GTPlayer.Instance.rightControllerTransform;
+                refrence.transform.localPosition = new Vector3(0f, -0.1f, 0f);
+                refrence.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+            }
             try
             {
                 if (LeftSecondary && menu == null)
@@ -41,7 +137,7 @@ namespace KmanModMenu
                     if (refrence == null)
                     {
                         refrence = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                        refrence.transform.parent = GorillaLocomotion.Player.Instance.rightControllerTransform;
+                        refrence.transform.parent = GorillaLocomotion.GTPlayer.Instance.rightControllerTransform;
                         refrence.transform.localPosition = new Vector3(0f, -0.1f, 0f);
                         refrence.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
                     }
@@ -50,24 +146,17 @@ namespace KmanModMenu
                 {
                     if (!LeftSecondary && menu != null)
                     {
-                        if (FakeMenu)
-                        {
-                            GorillaLocomotion.Player.Instance.inOverlay = false;
-                            GorillaTagger.Instance.offlineVRRig.enabled = true;
-                            GorillaLocomotion.Player.Instance.bodyCollider.attachedRigidbody.isKinematic = false;
-                        }
-
-                        Destroy(menu);
-                        menu = null;
-                        Destroy(refrence);
-                        refrence = null;
+                        //Destroy(menu);
+                        //menu = null;
+                        //Destroy(refrence);
+                        //refrence = null;
                     }
                 }
 
                 if (LeftSecondary && menu != null)
                 {
-                    menu.transform.position = GorillaLocomotion.Player.Instance.leftControllerTransform.position;
-                    menu.transform.rotation = GorillaLocomotion.Player.Instance.leftControllerTransform.rotation;
+                    menu.transform.position = GorillaLocomotion.GTPlayer.Instance.leftControllerTransform.position;
+                    menu.transform.rotation = GorillaLocomotion.GTPlayer.Instance.leftControllerTransform.rotation;
                 }
 
                 foreach (var b in Movement)
@@ -108,7 +197,7 @@ namespace KmanModMenu
                 {
                     transform =
                     {
-                        localScale = new Vector3(0.1f, 0.3f, 0.4f) * GorillaLocomotion.Player.Instance.scale
+                        localScale = new Vector3(0.1f, 0.3f, 0.4f) * GorillaLocomotion.GTPlayer.Instance.scale
                     }
                 };
 
@@ -126,8 +215,8 @@ namespace KmanModMenu
                 bg.transform.localPosition = new Vector3(0.5f, 0f, 0.012f);
 
                 var lerp = bg.AddComponent<ColourLerp>();
-                lerp.StartColor = Color.red * 0.65f;
-                lerp.EndColor = Color.red * 0.4f;
+                lerp.StartColor = Color.red * 0.45f;
+                lerp.EndColor = Color.red * 0.2f;
 
                 canvasObject = new GameObject("Canvas")
                 {
@@ -141,14 +230,14 @@ namespace KmanModMenu
                 canvasObject.AddComponent<GraphicRaycaster>();
                 canvas.renderMode = RenderMode.WorldSpace;
                 canvasScaler.dynamicPixelsPerUnit = 1000f;
-                canvasObject.transform.localScale *= GorillaLocomotion.Player.Instance.scale;
+                canvasObject.transform.localScale *= GorillaLocomotion.GTPlayer.Instance.scale;
 
                 var text = new GameObject("textObj").AddComponent<Text>();
 
                 text.transform.SetParent(canvasObject.transform);
 
                 text.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
-                text.text = "Kman Mod Menu";
+                text.text = "Kman Menu v0.2";
                 text.fontSize = 1;
                 text.alignment = TextAnchor.MiddleCenter;
                 text.resizeTextForBestFit = true;
@@ -156,8 +245,8 @@ namespace KmanModMenu
 
                 var rt = text.GetComponent<RectTransform>();
                 rt.localPosition = Vector3.zero;
-                rt.sizeDelta = new Vector2(0.28f, 0.05f);
-                rt.position = new Vector3(0.06f, 0f, 0.1495f);
+                rt.sizeDelta = new Vector2(0.24f, 0.05f);
+                rt.position = new Vector3(0.06f, 0f, 0.145f);
                 rt.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
 
                 GenerateButtons();
@@ -203,8 +292,8 @@ namespace KmanModMenu
                 gameObject.AddComponent<ButtonInclineCollider>().inc = 1;
 
                 var lerp = gameObject.AddComponent<ColourLerp>();
-                lerp.StartColor = Color.red * 0.65f;
-                lerp.EndColor = Color.red * 0.4f;
+                lerp.StartColor = Color.red * 0.45f;
+                lerp.EndColor = Color.red * 0.2f;
 
 
                 var tiosber = new GameObject();
@@ -236,8 +325,8 @@ namespace KmanModMenu
                 gameObject2.AddComponent<ButtonInclineCollider>().inc = -1;
 
                 var lerp1 = gameObject2.AddComponent<ColourLerp>();
-                lerp.StartColor = Color.red * 0.65f;
-                lerp.EndColor = Color.red * 0.4f;
+                lerp1.StartColor = Color.red * 0.45f;
+                lerp1.EndColor = Color.red * 0.2f;
 
                 var text2nd = new GameObject();
                 var text2 = text2nd.AddComponent<Text>();
@@ -266,7 +355,7 @@ namespace KmanModMenu
                 backButton.transform.localScale = new Vector3(0.09f, 0.8f, 0.08f);
                 backButton.transform.localPosition = new Vector3(0.56f, 0f, 0.51f);
 
-                backButton.AddComponent<ButtonCollider>().refrence = new Button
+                backButton.AddComponent<ButtonCollider>().refrence = new()
                 {
                     onClick = () =>
                     {
@@ -276,8 +365,8 @@ namespace KmanModMenu
                 };
 
                 var lerp3 = backButton.AddComponent<ColourLerp>();
-                lerp.StartColor = Color.red * 0.65f;
-                lerp.EndColor = Color.red * 0.4f;
+                lerp3.StartColor = Color.red * 0.45f;
+                lerp3.EndColor = Color.red * 0.2f;
 
                 var imrealylgay = new GameObject();
                 var text3 = imrealylgay.AddComponent<Text>();
@@ -324,9 +413,13 @@ namespace KmanModMenu
                 gameObject.AddComponent<ButtonCollider>().refrence = refrence;
 
                 if (refrence.Enabled)
-                    gameObject.GetComponent<Renderer>().material.color = Color.red * 0.75f;
+                    gameObject.GetComponent<Renderer>().material.color = Color.red * 0.45f;
                 else
-                    gameObject.GetComponent<Renderer>().material.color = Color.red * 0.6f;
+                {
+                    var lerp = gameObject.AddComponent<ColourLerp>();
+                    lerp.StartColor = Color.red * 0.45f;
+                    lerp.EndColor = Color.red * 0.2f;
+                }
                 var text2object = new GameObject();
                 var text2 = text2object.AddComponent<Text>();
                 text2.transform.SetParent(canvasObject.transform);
@@ -397,11 +490,10 @@ namespace KmanModMenu
         public static GameObject menu, refrence, canvasObject;
         public static int PageNumber, PageSize = 5;
         public static PageType CurrentPage = PageType.Home;
-        public static bool FakeMenu;
 
         public static Button[] Home =
         {
-            new Button
+            new()
             {
                 Name = "Config",
                 onClick = () =>
@@ -411,7 +503,7 @@ namespace KmanModMenu
                 },
                 isToggle = false
             },
-            new Button
+            new()
             {
                 Name = "Movement",
                 onClick = () =>
@@ -421,7 +513,7 @@ namespace KmanModMenu
                 },
                 isToggle = false
             },
-            new Button
+            new()
             {
                 Name = "Player",
                 onClick = () =>
@@ -431,7 +523,7 @@ namespace KmanModMenu
                 },
                 isToggle = false
             },
-            new Button
+            new()
             {
                 Name = "Visual",
                 onClick = () =>
@@ -441,7 +533,7 @@ namespace KmanModMenu
                 },
                 isToggle = false
             },
-            new Button
+            new()
             {
                 Name = "OP",
                 onClick = () =>
@@ -455,7 +547,7 @@ namespace KmanModMenu
 
         public static ConfigButton[] Config =
         {
-            new ConfigButton
+            new()
             {
                 CycleAction = ConfigHandler.HandTapIndex,
                 Additive = "Grass",
@@ -466,78 +558,78 @@ namespace KmanModMenu
 
         public static Button[] Movement =
         {
-            new Button
+            new()
             {
                 Name="Flight",
                 onClick = KmanModMenu.Mods.Movement.Flight,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Platforms",
                 onClick = KmanModMenu.Mods.Movement.Platforms.Execute,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Speed Boost",
                 onClick = KmanModMenu.Mods.Movement.SpeedBoost,
                 onDisable = KmanModMenu.Mods.Movement.CleanSP,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Long Arms",
                 onClick = KmanModMenu.Mods.Movement.LongArms,
                 onDisable = KmanModMenu.Mods.Movement.LongArmsClean,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="No Clip",
                 onClick = KmanModMenu.Mods.Movement.NoClip,
                 onDisable = KmanModMenu.Mods.Movement.DisableNoClip,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Check Point",
                 onClick = KmanModMenu.Mods.Movement.Checkpoint,
                 onDisable = KmanModMenu.Mods.Movement.CleanCheckpoint,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Teleport Gun",
                 onClick = KmanModMenu.Mods.Movement.TeleportGun,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Iron Monkey",
                 onClick = KmanModMenu.Mods.Movement.IronMonkey,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Low Gravity",
                 onClick = KmanModMenu.Mods.Movement.LowGrav,
                 onDisable = KmanModMenu.Mods.Movement.FixGrav,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Fast Swim",
                 onClick = KmanModMenu.Mods.Movement.FastSwim,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Fast Spin",
                 onClick = KmanModMenu.Mods.Movement.FastSpin,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Water Walk",
                 onClick = KmanModMenu.Mods.Movement.WaterWalk,
@@ -547,123 +639,123 @@ namespace KmanModMenu
         };
 
         public static Button[] Player =
-        {            new Button
+        {            new()
             {
                 Name = "Ghost Monkey",
                 onClick = () => RigMods.Ghost(),
                 onDisable = () => RigMods.Clean(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Invis Monkey",
                 onClick = () => RigMods.Invis(),
                 onDisable = () => RigMods.Clean(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Freeze Rig [G]",
                 onClick = () => RigMods.PauseRig(),
                 onDisable = () => RigMods.Clean(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Copy Gun",
                 onClick = () => RigMods.CopyGun(),
                 onDisable = () => RigMods.Clean(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Follow Player",
                 onClick = () => RigMods.FollowGun(),
                 isToggle = true
             },
 
-            new Button
+            new()
             {
                 Name = "Tag Gun",
                 onClick = () => GamemodeExploits.TagGun(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Tag All",
                 onClick = () => GamemodeExploits.TagAll(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Untag Gun [M]",
                 onClick = () => GamemodeExploits.UntagGun(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Untag Self [M]",
                 onClick = () => GamemodeExploits.UntagSelf(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Anti Tag [M]",
                 onClick = () => GamemodeExploits.AntiTag(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Lock Room",
                 onClick = () => LockRoom.Execute(),
                 onDisable = () => LockRoom.UnlockRoom(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Shop Lift",
                 onClick = () => Shoplift.Execute(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Rope Up",
                 onClick = () => Rope.Up(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Rope Down",
                 onClick = () => Rope.Down(),
                 isToggle = true
             },
 
-            new Button
+            new()
             {
                 Name = "Cosmetic Spazz",
                 onClick = () => Spammer.ExecuteCosmetic(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Braclet Spam [T]",
                 onClick = () => Spammer.ExecuteBracelet(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Hand Tap Spam",
                 onClick = () => Spammer.ExecuteHandTap(),
                 isToggle = true
             },
-            new Button
+            new()
             {
                 Name = "Door Spam",
                 onClick = () => Spammer.ExecuteDoor(),
                 isToggle = true
             },
 
-            new Button
+            new()
             {
                 Name = "Projectile Spam",
                 onClick = () => Projectiles.Execute(),
@@ -674,35 +766,35 @@ namespace KmanModMenu
 
         public static Button[] Visual =
         {
-            new Button
+            new()
             {
                 Name="Chams",
                 onClick = KmanModMenu.Mods.Visual.Chams.Execute,
                 onDisable = KmanModMenu.Mods.Visual.Chams.Disable,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Wireframe ESP",
                 onClick = KmanModMenu.Mods.Visual.BoxFrameESP.Execute,
                 onDisable = KmanModMenu.Mods.Visual.BoxFrameESP.Disable,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Box ESP",
                 onClick = KmanModMenu.Mods.Visual.BoxESP.Execute,
                 onDisable = KmanModMenu.Mods.Visual.BoxESP.Disable,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Tracers",
                 onClick = KmanModMenu.Mods.Visual.Tracers.Execute,
                 onDisable = KmanModMenu.Mods.Visual.Tracers.Disable,
                 isToggle = true,
             },
-            new Button
+            new()
             {
                 Name="Bread Crumbs",
                 onClick = KmanModMenu.Mods.Visual.BreadCrumbs.Execute,
@@ -712,7 +804,18 @@ namespace KmanModMenu
         };
 
         public static Button[] Overpowered =
-        { 
+        {
+            new() {
+                Name="Create Board",
+                onClick = () => Task.Run(()=>KmanModMenu.Mods.HoverboardItem.GenerateBoard()),
+                isToggle = false,
+            },
+            new()
+            {
+                Name="Create Board Gun",
+                onClick = () => Task.Run(()=>KmanModMenu.Mods.HoverboardItem.BoardGun()),
+                isToggle = true,
+            },
         };
 
         #endregion

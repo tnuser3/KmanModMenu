@@ -20,7 +20,14 @@ namespace KmanModMenu.Utilities
         private void Start()
         {
             renderer = GetComponent<Renderer>();
+
+            if (renderer.material == null)
+            {
+                renderer.material = new Material(Shader.Find("GorillaTag/UberShader"));
+            }
+
             renderer.material.color = StartColor;
+
         }
 
         private void Update()
@@ -34,7 +41,7 @@ namespace KmanModMenu.Utilities
 
         private void OnEnable()
         {
-            time = lerpTime;
+            lerpTime = time;
         }
     }
 }

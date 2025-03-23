@@ -19,8 +19,8 @@ namespace KmanModMenu.Utilities
             {
                 ghostRig = Object.Instantiate(
                     GorillaTagger.Instance.offlineVRRig,
-                    Player.Instance.transform.position,
-                    Player.Instance.transform.rotation
+                    GorillaLocomotion.GTPlayer.Instance.transform.position,
+                    GorillaLocomotion.GTPlayer.Instance.transform.rotation
                 );
                 ghostRig.enabled = false;
                 ghostRig.transform.position = Vector3.zero;
@@ -42,8 +42,8 @@ namespace KmanModMenu.Utilities
             if (!GorillaTagger.Instance.offlineVRRig.enabled)
             {
                 ghostRig.enabled = true;
-                ghostRig.rightHandTransform.position = Player.Instance.rightControllerTransform.position;
-                ghostRig.leftHandTransform.position = Player.Instance.leftControllerTransform.position;
+                ghostRig.rightHandTransform.position = GorillaLocomotion.GTPlayer.Instance.rightControllerTransform.position;
+                ghostRig.leftHandTransform.position = GorillaLocomotion.GTPlayer.Instance.leftControllerTransform.position;
                 ghostRig.mainSkin.material = ghostMaterial;
             }
             else

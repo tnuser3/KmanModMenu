@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KmanModMenu", "KmanModMenu\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KmanModule", "ModuleUtil\KmanModule.csproj", "{5829F59A-5BA8-4695-BFD9-3811BB09E9C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleExample", "ModuleExample\ModuleExample.csproj", "{73845440-D588-413A-8367-D83976AFB079}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5829F59A-5BA8-4695-BFD9-3811BB09E9C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5829F59A-5BA8-4695-BFD9-3811BB09E9C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5829F59A-5BA8-4695-BFD9-3811BB09E9C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73845440-D588-413A-8367-D83976AFB079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73845440-D588-413A-8367-D83976AFB079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73845440-D588-413A-8367-D83976AFB079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73845440-D588-413A-8367-D83976AFB079}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

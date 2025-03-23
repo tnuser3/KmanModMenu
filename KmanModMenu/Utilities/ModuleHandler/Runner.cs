@@ -17,6 +17,7 @@ namespace KmanModMenu.Utilities.ModuleHandler
 
         public Task LoadTask()
         {
+            ModuleManager.LoadModuleHandler().Wait();
             ModuleManager.LoadModules().Wait();
             var moduleTask = ModuleManager.getModules();
             moduleTask.Wait();

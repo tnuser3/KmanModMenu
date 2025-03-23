@@ -4,6 +4,7 @@ using HarmonyLib;
 using KmanModMenu.Mods;
 using KmanModMenu.Mods.Player;
 using KmanModMenu.Utilities;
+using KmanModMenu.Utilities.ModuleHandler;
 using ModIOBrowser.Implementation;
 using System;
 using System.Linq;
@@ -47,6 +48,7 @@ namespace KmanModMenu
             go.AddComponent<Plugin>();
             go.AddComponent<Inputs>();
             go.AddComponent<GhostLib>();
+            go.AddComponent<Runner>();
             DontDestroyOnLoad(go);
             go.hideFlags = HideFlags.HideAndDontSave;
             new HarmonyLib.Harmony("KmanModMenu").PatchAll();

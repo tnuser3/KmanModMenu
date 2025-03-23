@@ -22,10 +22,41 @@ namespace KmanModMenu.Utilities.ModuleHandler
             public Type Register { get; set; }
         }
 
+        static Assembly moduleAssembly;
+
+        private static byte[] LoadEmbeddedResource(string resourceName)
+        {
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new ArgumentException($"Resource '{resourceName}' not found.");
+                }
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    stream.CopyTo(ms);
+                    return ms.ToArray();
+                }
+            }
+        }
+
+        public static Task LoadModuleHandler()
+        {
+            byte[] dllBytes = LoadEmbeddedResource("KmanModMenu.Assets.KmanModule.dll");
+            moduleAssembly = Assembly.Load(dllBytes);
+            Console.WriteLine(moduleAssembly.FullName);
+            return Task.CompletedTask;
+        }
+
         public static Task LoadModules()
         {
             var path = Path.Combine(Paths.PluginPath, "kmanmodules");
-            if (!Directory.Exists(path)) return Task.CompletedTask;
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+                return Task.CompletedTask;
+            }
 
             foreach (var file in Directory.GetFiles(path))
             {

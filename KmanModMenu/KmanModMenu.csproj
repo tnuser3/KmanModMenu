@@ -884,5 +884,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\DiscordRPC.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\KmanModule.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

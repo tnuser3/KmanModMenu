@@ -11,7 +11,5 @@ namespace KmanModule
         void Init();
         void Update();
         void OnLoad();
-        void OnUnload();
-        void UnLoad();
     }
 }

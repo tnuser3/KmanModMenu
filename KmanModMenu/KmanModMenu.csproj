@@ -878,6 +878,7 @@
     <Compile Include="Utilities\Inputs.cs" />
     <Compile Include="Harmony\Teleport.cs" />
     <Compile Include="Utilities\ModuleHandler\ModuleManager.cs" />
+    <Compile Include="Utilities\ModuleHandler\Runner.cs" />
     <Compile Include="Utilities\PhotonManager.cs" />
   </ItemGroup>
   <ItemGroup>

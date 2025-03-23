@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using static UnityEngine.ParticleSystem;
 
 namespace KmanModMenu.Utilities.ModuleHandler
 {
@@ -24,7 +23,7 @@ namespace KmanModMenu.Utilities.ModuleHandler
 
         static Assembly moduleAssembly;
 
-        private static byte[] LoadEmbeddedResource(string resourceName)
+        public static byte[] LoadEmbeddedResource(string resourceName)
         {
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
             {
@@ -41,21 +40,21 @@ namespace KmanModMenu.Utilities.ModuleHandler
             }
         }
 
-        public static Task LoadModuleHandler()
+        public static void LoadModuleHandler()
         {
             byte[] dllBytes = LoadEmbeddedResource("KmanModMenu.Assets.KmanModule.dll");
             moduleAssembly = Assembly.Load(dllBytes);
+
             Console.WriteLine(moduleAssembly.FullName);
-            return Task.CompletedTask;
         }
 
-        public static Task LoadModules()
+        public static void  LoadModules()
         {
             var path = Path.Combine(Paths.PluginPath, "kmanmodules");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
-                return Task.CompletedTask;
+                return;
             }
 
             foreach (var file in Directory.GetFiles(path))
@@ -66,32 +65,35 @@ namespace KmanModMenu.Utilities.ModuleHandler
                 }
                 catch {}
             }
-            return Task.CompletedTask;
         }
-
-        public static Task<List<module>> getModules()
+        public static List<module> getModules()
         {
-            return Task.FromResult(AppDomain.CurrentDomain.GetAssemblies()
+            var moduleType = moduleAssembly.GetType("KmanModule.Module");
+
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .Where(assembly => assembly != null &&
+                                  !assembly.FullName.ToLower().Contains("unity") &&
+                                  !assembly.FullName.ToLower().Contains("system"))
                 .SelectMany(assembly => assembly.DefinedTypes)
-                .Where(moduleEntry => moduleEntry.GetInterfaces().Contains(typeof(KmanModule.Module)))
+                .Where(moduleEntry => moduleEntry.GetInterfaces().Contains(moduleType))
                 .Select(moduleEntry => new
                 {
-                    Attribute = moduleEntry.GetCustomAttribute<KmanModule.ModuleAttribute>(),
+                    Attribute = moduleEntry.GetCustomAttributesData()
+                        .FirstOrDefault(attr => attr.AttributeType.Name == "ModuleAttribute"),
                     Module = moduleEntry.Assembly,
                     Type = moduleEntry.AsType()
                 })
                 .Where(x => x.Attribute != null)
                 .Select(x => new module
                 {
-                    guid = x.Attribute.Guid,
-                    creator = x.Attribute.Creator,
-                    name = x.Attribute.Name,
-                    description = x.Attribute.Description,
-                    version = x.Attribute.Version,
-                    Module = x.Module,
-                    Register = x.Type,
+                    guid = (string)x.Attribute.ConstructorArguments[0].Value,
+                    creator = (string)x.Attribute.ConstructorArguments[1].Value,
+                    name = (string)x.Attribute.ConstructorArguments[2].Value,
+                    description = (string)x.Attribute.ConstructorArguments[3].Value,
+                    version = (string)x.Attribute.ConstructorArguments[4].Value,
+                    Module = x.Module
                 })
-                .ToList());
+                .ToList();
         }
     }
 }

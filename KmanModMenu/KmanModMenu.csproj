@@ -147,9 +147,6 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Gorilla Tag\Gorilla Tag_Data\Managed\KID.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="KmanModule">
-      <HintPath>..\ModuleUtil\bin\Release\KmanModule.dll</HintPath>
-    </Reference>
     <Reference Include="LIV.LCK">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Gorilla Tag\Gorilla Tag_Data\Managed\LIV.LCK.dll</HintPath>
       <Private>False</Private>

@@ -91,7 +91,8 @@ namespace KmanModMenu.Utilities.ModuleHandler
                     name = (string)x.Attribute.ConstructorArguments[2].Value,
                     description = (string)x.Attribute.ConstructorArguments[3].Value,
                     version = (string)x.Attribute.ConstructorArguments[4].Value,
-                    Module = x.Module
+                    Module = x.Module, 
+                    Register = x.Type
                 })
                 .ToList();
         }

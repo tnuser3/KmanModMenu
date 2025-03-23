@@ -29,13 +29,12 @@ namespace KmanModMenu.Utilities.ModuleHandler
         }
 
         static List<ModuleManager.module> modules = new List<ModuleManager.module>();
-        static List<MethodInfo> updateListeners = new List<MethodInfo>();
+        static List<Tuple<MethodInfo, object>> updateListeners = new List<Tuple<MethodInfo, object>>();
 
         public void Start()
         {
             LoadTask();
         }
-
         public Task LoadTask()
         {
             ModuleManager.LoadModuleHandler();
@@ -44,9 +43,14 @@ namespace KmanModMenu.Utilities.ModuleHandler
             foreach (var module in moduleTask)
             {
                 Console.WriteLine($"Loaded module {module.name}");
-                module.Register?.GetMethod("OnLoad")?.Invoke(module.Register, []);
-                module.Register?.GetMethod("Init")?.Invoke(module.Register, []);
-                updateListeners.Add(module.Register?.GetMethod("Update"));
+                var moduleInstance = Activator.CreateInstance(module.Register);
+                module.Register.GetMethod("OnLoad")?.Invoke(moduleInstance, []);
+                module.Register.GetMethod("Init")?.Invoke(moduleInstance, []);
+                var updateMethod = module.Register.GetMethod("Update");
+                if (updateMethod != null)
+                {
+                    updateListeners.Add(new Tuple<MethodInfo, object>(updateMethod, moduleInstance));
+                }
             }
             return Task.CompletedTask;
         }
@@ -54,7 +58,9 @@ namespace KmanModMenu.Utilities.ModuleHandler
         public void Update()
         {
             foreach (var update in updateListeners)
-                update?.Invoke(update.DeclaringType, []);
+            {
+                update.Item1?.Invoke(update.Item2, []); // Pass the instance to the Update method
+            }
         }
     }
 }

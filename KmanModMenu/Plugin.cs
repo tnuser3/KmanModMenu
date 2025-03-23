@@ -16,7 +16,7 @@ using static KmanModMenu.Utilities.Inputs;
 
 namespace KmanModMenu
 {
-    [BepInPlugin("com.kman.modmenu", "kmanmodmenu", "0.1.0")]
+    [BepInPlugin("com.kman.modmenu", "kmanmodmenu", "0.2.0")]
     public class Plugin : BaseUnityPlugin
     {
         #region Initializer
@@ -237,7 +237,7 @@ namespace KmanModMenu
                 text.transform.SetParent(canvasObject.transform);
 
                 text.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
-                text.text = "Kman Menu v0.1";
+                text.text = "Kman Menu v0.2";
                 text.fontSize = 1;
                 text.alignment = TextAnchor.MiddleCenter;
                 text.resizeTextForBestFit = true;
